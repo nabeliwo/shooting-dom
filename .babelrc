@@ -1,0 +1,33 @@
+{
+  "env": {
+    "development": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": false,
+            "targets": {
+              "Chrome": 65
+            },
+            "exclude": ["transform-regenerator"]
+          }
+        ],
+        "@babel/preset-react"
+      ]
+    },
+    "production": {
+      "presets": [
+        [
+          "@babel/preset-env",
+            {
+            "modules": false,
+            "targets": {
+              "browsers": "> 1%"
+            }
+          }
+        ],
+        "@babel/preset-react"
+      ]
+    }
+  }
+}
