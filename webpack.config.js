@@ -5,14 +5,13 @@ const merge = require('webpack-merge')
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 const baseConfig = {
-  entry: {
-    bundle: './src/js/main.js'
-  },
   output: {
-    path: path.join(__dirname, './dist')
+    filename: 'bundle.js',
+    path: path.join(__dirname, './dist'),
+    publicPath: '/dist',
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
   module: {
     rules: [
@@ -21,20 +20,34 @@ const baseConfig = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader'
-          }
-        ]
-      }
-    ]
-  }
+            loader: 'babel-loader',
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+  ],
 }
 const devConfig = {
+  entry: ['react-hot-loader/patch', './src/js/main.jsx'],
   devtool: 'source-map',
+  devServer: {
+    contentBase: './',
+    port: 3000,
+  },
   plugins: [
     new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  ]
+    new webpack.NoEmitOnErrorsPlugin(),
+  ],
 }
-const prdConfig = {}
+const prdConfig = {
+  entry: './src/js/main.jsx',
+}
 
 module.exports = merge(baseConfig, isDevelopment ? devConfig : prdConfig)
